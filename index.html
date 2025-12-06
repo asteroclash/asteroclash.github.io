@@ -1,1 +1,1395 @@
-hello world
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astero Level - Flyer Hebdomadaire</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gold: #FFD700;
+            --secondary-gold: #FFC107;
+            --dark-blue: #0A0E17;
+            --medium-blue: #1A2332;
+            --light-blue: #2A3B5E;
+            --accent-red: #FF3B30;
+            --accent-green: #4CD964;
+            --accent-purple: #9D4EDD;
+            --text-white: #FFFFFF;
+            --text-gray: #B0B8C5;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #0A0E17 0%, #1A2332 100%);
+            color: var(--text-white);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Conteneur principal du flyer */
+        .flyer-container {
+            width: 1200px;
+            min-height: 1800px;
+            background: linear-gradient(145deg, 
+                rgba(10, 14, 23, 0.95) 0%,
+                rgba(26, 35, 50, 0.95) 50%,
+                rgba(42, 59, 94, 0.95) 100%);
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5),
+                        0 0 100px rgba(255, 215, 0, 0.1);
+            border: 5px solid var(--primary-gold);
+        }
+
+        /* Arrière-plan avec effets */
+        .background-effects {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-crown {
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            font-size: 400px;
+            color: rgba(255, 215, 0, 0.05);
+            transform: rotate(25deg);
+        }
+
+        .bg-sword {
+            position: absolute;
+            bottom: -150px;
+            left: -100px;
+            font-size: 300px;
+            color: rgba(255, 215, 0, 0.04);
+            transform: rotate(-15deg);
+        }
+
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+            top: -400px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* En-tête */
+        .header {
+            position: relative;
+            z-index: 1;
+            padding: 50px 60px 30px;
+            text-align: center;
+            background: linear-gradient(90deg, 
+                rgba(255, 215, 0, 0.1) 0%,
+                rgba(255, 193, 7, 0.2) 100%);
+            border-bottom: 3px solid var(--primary-gold);
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+        }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 82px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.5),
+                         0 0 60px rgba(255, 215, 0, 0.3),
+                         0 0 90px rgba(255, 215, 0, 0.1);
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+        }
+
+        .subtitle {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--primary-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .date-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-purple), #6A11CB);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--text-white);
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.3);
+        }
+
+        /* Stats globales */
+        .global-stats {
+            position: relative;
+            z-index: 1;
+            padding: 40px 60px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-gold);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-gold), var(--secondary-gold));
+        }
+
+        .stat-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .stat-label {
+            font-size: 16px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Section des clans */
+        .clans-section {
+            position: relative;
+            z-index: 1;
+            padding: 40px 60px;
+        }
+
+        .league-section {
+            margin-bottom: 40px;
+        }
+
+        .league-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid;
+        }
+
+        .league-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            font-weight: 900;
+        }
+
+        .league-count {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .clans-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .clan-card {
+            background: linear-gradient(145deg, 
+                rgba(26, 35, 50, 0.9) 0%,
+                rgba(42, 59, 94, 0.9) 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .clan-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-gold);
+            box-shadow: 0 15px 35px rgba(255, 215, 0, 0.2);
+        }
+
+        .clan-header {
+            padding: 20px;
+            background: linear-gradient(90deg, 
+                rgba(255, 215, 0, 0.1) 0%,
+                rgba(255, 193, 7, 0.2) 100%);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .clan-header:hover {
+            background: linear-gradient(90deg, 
+                rgba(255, 215, 0, 0.15) 0%,
+                rgba(255, 193, 7, 0.25) 100%);
+        }
+
+        .clan-name {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--primary-gold);
+            margin-bottom: 5px;
+        }
+
+        .clan-tag {
+            font-size: 14px;
+            color: var(--text-gray);
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .clan-content {
+            padding: 20px;
+        }
+
+        .clan-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .clan-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+        }
+
+        .clan-stat-value {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-white);
+            margin-bottom: 3px;
+        }
+
+        .clan-stat-label {
+            font-size: 12px;
+            color: var(--text-gray);
+            text-transform: uppercase;
+        }
+
+        .members-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+
+        .members-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-green), #2ECC71);
+            border-radius: 3px;
+            transition: width 1s ease;
+        }
+
+        .members-count {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-gray);
+            font-size: 12px;
+            margin-bottom: 15px;
+        }
+
+        .clan-requirements {
+            text-align: center;
+            color: var(--primary-gold);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* Bouton caché lors de l'export - IMPORTANT */
+        .clan-action-button {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, var(--accent-purple), #6A11CB);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            opacity: 1;
+        }
+
+        .clan-action-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(157, 78, 221, 0.4);
+        }
+
+        /* Cette classe sera manipulée par JavaScript pour cacher les boutons */
+        .export-hide {
+            /* Les boutons avec cette classe seront cachés lors de l'export */
+        }
+
+        /* Section Discord */
+        .discord-section {
+            position: relative;
+            z-index: 1;
+            padding: 40px 60px;
+            margin: 40px 60px;
+            background: linear-gradient(135deg, 
+                rgba(88, 101, 242, 0.2) 0%,
+                rgba(71, 82, 196, 0.3) 100%);
+            border-radius: 25px;
+            border: 2px solid rgba(88, 101, 242, 0.5);
+            text-align: center;
+        }
+
+        .discord-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .discord-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .discord-icon {
+            font-size: 48px;
+        }
+
+        .discord-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 38px;
+            color: #7289DA;
+            text-shadow: 0 0 20px rgba(114, 137, 218, 0.5);
+        }
+
+        .discord-link {
+            display: inline-block;
+            text-decoration: none;
+            background: rgba(0, 0, 0, 0.3);
+            border: 3px solid #7289DA;
+            border-radius: 15px;
+            padding: 20px 35px;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+
+        .discord-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(114, 137, 218, 0.4);
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .discord-code {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-gold);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .discord-url {
+            font-size: 16px;
+            color: var(--text-white);
+            opacity: 0.9;
+            word-break: break-all;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .discord-info {
+            font-size: 18px;
+            color: var(--text-white);
+            margin-top: 15px;
+            opacity: 0.9;
+        }
+
+        /* Avantages */
+        .advantages-section {
+            position: relative;
+            z-index: 1;
+            padding: 40px 60px;
+        }
+
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .advantage-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .advantage-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-gold);
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .advantage-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .advantage-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 20px;
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+        }
+
+        .advantage-description {
+            font-size: 15px;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        /* Pied de page */
+        .footer {
+            position: relative;
+            z-index: 1;
+            padding: 40px 60px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 2px solid rgba(255, 215, 0, 0.2);
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .copyright {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin-top: 20px;
+            opacity: 0.7;
+        }
+
+        /* Bouton d'export */
+        .export-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--primary-gold), var(--secondary-gold));
+            color: var(--dark-blue);
+            border: none;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.6);
+        }
+
+        /* Responsive */
+        @media (max-width: 1300px) {
+            .flyer-container {
+                width: 95%;
+                margin: 20px auto;
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .clans-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .advantages-grid,
+            .global-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .main-title {
+                font-size: 48px;
+            }
+            
+            .subtitle {
+                font-size: 20px;
+            }
+            
+            .global-stats,
+            .clans-section,
+            .advantages-section,
+            .discord-section {
+                padding: 30px 20px;
+            }
+            
+            .advantages-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .league-title {
+                font-size: 24px;
+            }
+            
+            .discord-title {
+                font-size: 28px;
+            }
+        }
+    </style>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="flyer-container" id="flyer">
+        <!-- Arrière-plan décoratif -->
+        <div class="background-effects">
+            <div class="bg-crown">👑</div>
+            <div class="bg-sword">⚔️</div>
+            <div class="bg-glow"></div>
+        </div>
+
+        <!-- En-tête -->
+        <header class="header">
+            <h1 class="main-title">ASTERO LEVEL</h1>
+            <div class="subtitle">NOTRE COMMUNAUTÉ FAIT LA DIFFÉRENCE ✨</div>
+            <div class="date-badge" id="current-date">SATURDAY 06 DECEMBER 2025</div>
+        </header>
+
+        <!-- Stats globales -->
+        <section class="global-stats">
+            <div class="stat-card">
+                <div class="stat-icon">👑</div>
+                <div class="stat-value" id="total-trophies">1,269,261</div>
+                <div class="stat-label">Trophées Totaux</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⚔️</div>
+                <div class="stat-value" id="total-war-trophies">12,903</div>
+                <div class="stat-label">Trophées de Guerre</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value" id="total-members">651</div>
+                <div class="stat-label">Membres Actifs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-value" id="active-clans">15</div>
+                <div class="stat-label">Clans Actifs</div>
+            </div>
+        </section>
+
+        <!-- Section des clans organisés par ligue -->
+        <section class="clans-section">
+            <h2 class="section-title">NOS CLANS PAR LIGUE DE GUERRE</h2>
+
+            <div class="league-section">
+                <div class="league-header" style="border-color: #9D4EDD;">
+                    <span class="league-title" style="color: #9D4EDD;">
+                        🏆 Ligue Légendaire
+                    </span>
+                    <span class="league-count" style="color: #9D4EDD; background-color: #9D4EDD20;">
+                        2 clans
+                    </span>
+                </div>
+                <div class="clans-grid">
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Level 12
+                            </div>
+                            <div class="clan-tag">#Q0V8PVYV</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">2,942</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #9D4EDD; text-shadow: 0 0 10px #9D4EDD80;">
+                                        3,215
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 2.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>1/50 membres</span>
+                                <span>2%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 8,000 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23Q0V8PVYV" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Level 13
+                            </div>
+                            <div class="clan-tag">#QLCRJ9L9</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">102,007</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #9D4EDD; text-shadow: 0 0 10px #9D4EDD80;">
+                                        2,930
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 98.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>49/50 membres</span>
+                                <span>98%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 10,000 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23QLCRJ9L9" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="league-section">
+                <div class="league-header" style="border-color: #FFD700;">
+                    <span class="league-title" style="color: #FFD700;">
+                        🥇 Ligue Or
+                    </span>
+                    <span class="league-count" style="color: #FFD700; background-color: #FFD70020;">
+                        1 clan
+                    </span>
+                </div>
+                <div class="clans-grid">
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                CASINO
+                            </div>
+                            <div class="clan-tag">#GV2VURUV</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">98,824</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #FFD700; text-shadow: 0 0 10px #FFD70080;">
+                                        1,617
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 100.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>50/50 membres</span>
+                                <span>100%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 6,000 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23GV2VURUV" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="league-section">
+                <div class="league-header" style="border-color: #CD7F32;">
+                    <span class="league-title" style="color: #CD7F32;">
+                        🥉 Ligue Bronze
+                    </span>
+                    <span class="league-count" style="color: #CD7F32; background-color: #CD7F3220;">
+                        10 clans
+                    </span>
+                </div>
+                <div class="clans-grid">
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Level 1
+                            </div>
+                            <div class="clan-tag">#LCRQ0CV8</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">99,837</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #CD7F32; text-shadow: 0 0 10px #CD7F3280;">
+                                        836
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 100.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>50/50 membres</span>
+                                <span>100%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 6,000 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23LCRQ0CV8" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Level 14
+                            </div>
+                            <div class="clan-tag">#QR2J90C2</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">99,928</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #CD7F32; text-shadow: 0 0 10px #CD7F3280;">
+                                        640
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 100.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>50/50 membres</span>
+                                <span>100%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 7,000 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23QR2J90C2" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Level 2
+                            </div>
+                            <div class="clan-tag">#GC0VJQ08</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">100,313</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #CD7F32; text-shadow: 0 0 10px #CD7F3280;">
+                                        600
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 100.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>50/50 membres</span>
+                                <span>100%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 6,000 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23GC0VJQ08" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Level 15
+                            </div>
+                            <div class="clan-tag">#RGQR8PGJ</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">99,335</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #CD7F32; text-shadow: 0 0 10px #CD7F3280;">
+                                        600
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 98.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>49/50 membres</span>
+                                <span>98%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 6,000 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23RGQR8PGJ" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Level 3
+                            </div>
+                            <div class="clan-tag">#GCUG20UQ</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">97,921</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #CD7F32; text-shadow: 0 0 10px #CD7F3280;">
+                                        550
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 100.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>50/50 membres</span>
+                                <span>100%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 6,000 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23GCUG20UQ" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Level 5
+                            </div>
+                            <div class="clan-tag">#RLUR0JGC</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">99,090</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #CD7F32; text-shadow: 0 0 10px #CD7F3280;">
+                                        480
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 100.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>50/50 membres</span>
+                                <span>100%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 6,000 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23RLUR0JGC" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Level 4
+                            </div>
+                            <div class="clan-tag">#GQR99P2Y</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">98,696</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #CD7F32; text-shadow: 0 0 10px #CD7F3280;">
+                                        475
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 100.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>50/50 membres</span>
+                                <span>100%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 6,000 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23GQR99P2Y" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Level 6
+                            </div>
+                            <div class="clan-tag">#GGQ880QG</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">92,860</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #CD7F32; text-shadow: 0 0 10px #CD7F3280;">
+                                        455
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 100.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>50/50 membres</span>
+                                <span>100%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 0 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23GGQ880QG" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Level 7
+                            </div>
+                            <div class="clan-tag">#RV209Q0J</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">88,532</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #CD7F32; text-shadow: 0 0 10px #CD7F3280;">
+                                        110
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 100.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>50/50 membres</span>
+                                <span>100%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 0 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23RV209Q0J" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Level 8
+                            </div>
+                            <div class="clan-tag">#J0G0CU2J</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">83,755</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #CD7F32; text-shadow: 0 0 10px #CD7F3280;">
+                                        5
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 100.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>50/50 membres</span>
+                                <span>100%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 0 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23J0G0CU2J" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="league-section">
+                <div class="league-header" style="border-color: #808080;">
+                    <span class="league-title" style="color: #808080;">
+                        ⚫ Clan sans GDC
+                    </span>
+                    <span class="league-count" style="color: #808080; background-color: #80808020;">
+                        2 clans
+                    </span>
+                </div>
+                <div class="clans-grid">
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Chill
+                            </div>
+                            <div class="clan-tag">#G2V0JLCJ</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">97,043</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #808080; text-shadow: 0 0 10px #80808080;">
+                                        390
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 98.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>49/50 membres</span>
+                                <span>98%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 5,000 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23G2V0JLCJ" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="clan-card">
+                        <div class="clan-header">
+                            <div class="clan-name">
+                                Astero Zen
+                            </div>
+                            <div class="clan-tag">#R0R900JP</div>
+                        </div>
+                        <div class="clan-content">
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value">8,178</div>
+                                    <div class="clan-stat-label">Trophées</div>
+                                </div>
+                                <div class="clan-stat">
+                                    <div class="clan-stat-value" style="color: #808080; text-shadow: 0 0 10px #80808080;">
+                                        0
+                                    </div>
+                                    <div class="clan-stat-label">Guerre</div>
+                                </div>
+                            </div>
+                            <div class="members-bar">
+                                <div class="members-fill" style="width: 6.0%"></div>
+                            </div>
+                            <div class="members-count">
+                                <span>3/50 membres</span>
+                                <span>6%</span>
+                            </div>
+                            <div class="clan-requirements">
+                                Min. 0 trophées requis
+                            </div>
+                            
+                            <!-- Bouton "Ouvrir dans Clash Royale" qui sera masqué lors de l'export -->
+                            <a href="clashroyale://clanInfo?id=%23R0R900JP" class="clan-action-button export-hide">
+                                📱 Ouvrir dans Clash Royale
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Section Discord -->
+        <section class="discord-section">
+            <div class="discord-content">
+                <div class="discord-header">
+                    <div class="discord-icon">
+                        <svg viewBox="0 0 24 24" width="48" height="48" fill="#7289DA">
+                            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028c.462-.63.872-1.295 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128c.125-.094.25-.188.372-.283a.076.076 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.076.076 0 0 1 .078.01c.12.095.245.189.37.283a.077.077 0 0 1-.006.127a12.3 12.3 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.355.698.765 1.363 1.226 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+                        </svg>
+                    </div>
+                    <h2 class="discord-title">REJOINS NOTRE DISCORD</h2>
+                </div>
+                <a href="https://discord.gg/ztVYKGJ" target="_blank" class="discord-link">
+                    <div class="discord-code">ztVYKGJ</div>
+                    <div class="discord-url">discord.gg/ztVYKGJ</div>
+                </a>
+                <p class="discord-info">
+                    Rejoins notre Discord pour les stratégies, les événements exclusifs<br>
+                    et la coordination des guerres de clans !
+                </p>
+            </div>
+        </section>
+
+        <!-- Section avantages -->
+        <section class="advantages-section">
+            <h2 class="section-title">POURQUOI NOUS REJOINDRE ?</h2>
+            <div class="advantages-grid">
+                <div class="advantage-card">
+                    <div class="advantage-icon">⚡</div>
+                    <h3 class="advantage-title">PROGRESSION RAPIDE</h3>
+                    <p class="advantage-description">Dons réguliers et conseils de joueurs expérimentés pour monter en puissance</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">👑</div>
+                    <h3 class="advantage-title">GUERRES DE CLANS</h3>
+                    <p class="advantage-description">Participation active aux guerres avec stratégie d'équipe et coordination</p>
+                </div>
+                <div class="advantage-card">
+                    <div class="advantage-icon">🛡️</div>
+                    <h3 class="advantage-title">COMMUNAUTÉ SOLIDAIRE</h3>
+                    <p class="advantage-description">Ambiance conviviale et entraide entre tous les membres du réseau</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pied de page -->
+        <footer class="footer">
+            <p class="copyright">
+                © 2025 Astero Level Network. Tous droits réservés.<br>
+                Données mises à jour automatiquement via l'API officielle Clash Royale
+            </p>
+        </footer>
+    </div>
+
+    <!-- Bouton d'export -->
+    <button class="export-btn" onclick="exportFlyer()">
+        📸 Exporter le Flyer
+    </button>
+
+    <script>
+        function exportFlyer() {
+            const flyer = document.getElementById('flyer');
+            const exportBtn = document.querySelector('.export-btn');
+            
+            // Cacher le bouton d'export et tous les boutons de clan
+            exportBtn.style.display = 'none';
+            
+            // Cacher tous les boutons avec la classe export-hide
+            document.querySelectorAll('.export-hide').forEach(button => {
+                button.style.display = 'none';
+            });
+            
+            // Afficher un message
+            const originalText = exportBtn.innerHTML;
+            exportBtn.innerHTML = '⏳ Génération en cours...';
+            
+            html2canvas(flyer, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: null,
+                logging: true,
+                allowTaint: true
+            }).then(canvas => {
+                // Restaurer le bouton d'export
+                exportBtn.style.display = 'flex';
+                exportBtn.innerHTML = originalText;
+                
+                // Restaurer tous les boutons de clan
+                document.querySelectorAll('.export-hide').forEach(button => {
+                    button.style.display = 'block';
+                });
+                
+                // Convertir en image et télécharger
+                const link = document.createElement('a');
+                const today = new Date().toISOString().split('T')[0];
+                link.download = `Astero-Level-Flyer-${today}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                // Afficher une notification
+                alert('✅ Flyer exporté avec succès !');
+            }).catch(error => {
+                console.error('Erreur lors de l\'export:', error);
+                exportBtn.style.display = 'flex';
+                exportBtn.innerHTML = originalText;
+                document.querySelectorAll('.export-hide').forEach(button => {
+                    button.style.display = 'block';
+                });
+                alert('❌ Erreur lors de l\'export. Vérifiez la console.');
+            });
+        }
+    </script>
+</body>
+</html>
