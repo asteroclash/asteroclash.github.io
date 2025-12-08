@@ -425,20 +425,13 @@
         @media (min-width: 1024px) {
             .clans-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-        }
-
-        @media (min-width: 1400px) {
-            .clans-grid {
-                grid-template-columns: repeat(3, 1fr);
                 gap: 25px;
             }
         }
 
-        @media (min-width: 2000px) {
+        @media (min-width: 1600px) {
             .clans-grid {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(3, 1fr);
                 gap: 30px;
             }
         }
@@ -521,12 +514,14 @@
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
+            padding-right: 70px;
         }
 
         @media (min-width: 768px) {
             .clan-name {
                 font-size: 22px;
                 margin-bottom: 5px;
+                padding-right: 80px;
             }
         }
 
@@ -558,14 +553,15 @@
 
         .recruitment-badge {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 10px;
+            top: 8px;
+            right: 8px;
+            font-size: 9px;
             font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 12px;
+            padding: 3px 7px;
+            border-radius: 10px;
             text-transform: uppercase;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            z-index: 10;
         }
 
         .recruitment-badge.recruiting {
@@ -581,10 +577,10 @@
 
         @media (min-width: 768px) {
             .recruitment-badge {
-                font-size: 12px;
-                padding: 5px 10px;
-                top: 15px;
-                right: 15px;
+                font-size: 11px;
+                padding: 4px 9px;
+                top: 10px;
+                right: 10px;
             }
         }
 
@@ -1078,7 +1074,7 @@
                 Rejoignez la famille Astero ! Une communauté active, organisée et ambitieuse sur Clash Royale.<br>
                 Trouvez le clan qui correspond à votre niveau et progressez avec nous.
             </p>
-            <div class="date-badge" id="current-date">LUNDI 8 DÉCEMBRE 2025 - 22:43</div>
+            <div class="date-badge" id="current-date">LUNDI 8 DÉCEMBRE 2025 - 22:49</div>
         </header>
 
         <!-- Stats globales -->
